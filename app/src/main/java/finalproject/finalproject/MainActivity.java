@@ -5,21 +5,28 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
 import android.widget.TextView;
 
+import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.HttpMethod;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.security.Permission;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class MainActivity extends Activity {
     private TextView info;
@@ -61,17 +68,22 @@ public class MainActivity extends Activity {
         setContentView(R.layout.main_activity);
         info = (TextView)findViewById(R.id.info);
         loginButton = (LoginButton)findViewById(R.id.login_button);
-
+        loginButton.setReadPermissions(Arrays.asList("user_tagged_places"));
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                info.setText(
-                        "User ID: "
-                                + loginResult.getAccessToken().getUserId()
-                                + "\n" +
-                                "Auth Token: "
-                                + loginResult.getAccessToken().getToken()
-                );
+
+                new GraphRequest(
+                        AccessToken.getCurrentAccessToken(),
+                        "/me/tagged_places",
+                        null,
+                        HttpMethod.GET,
+                        new GraphRequest.Callback() {
+                            public void onCompleted(GraphResponse response) {
+                                info.setText(response.toString());
+
+                            }
+                        }).executeAsync();
             }
 
             @Override
@@ -83,7 +95,6 @@ public class MainActivity extends Activity {
             public void onError(FacebookException e) {
                 info.setText("Login attempt failed.");
             }
-
         });
     }
 }
