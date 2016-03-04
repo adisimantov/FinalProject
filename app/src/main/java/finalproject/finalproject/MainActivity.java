@@ -21,6 +21,9 @@ import com.facebook.HttpMethod;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.Permission;
@@ -72,16 +75,18 @@ public class MainActivity extends Activity {
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-
+                //"me/tagged_places?fields=created_time,place{name,category_list,location}"
+                Bundle parameters = new Bundle();
+                parameters.putString("fields", "created_time.order(reverse_chronological)," +
+                        "place{name,category_list,location}");
                 new GraphRequest(
                         AccessToken.getCurrentAccessToken(),
-                        "/me/tagged_places",
-                        null,
+                        "me/tagged_places",
+                        parameters,
                         HttpMethod.GET,
                         new GraphRequest.Callback() {
                             public void onCompleted(GraphResponse response) {
                                 info.setText(response.toString());
-
                             }
                         }).executeAsync();
             }
