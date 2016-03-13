@@ -91,9 +91,9 @@ public class CheckinSql {
 
     public static void create(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE " + CHECKIN_TABLE + " (" +
-                CHECKIN_TYPE + " TEXT PRIMARY KEY," +
+                CHECKIN_TYPE + " TEXT NOT NULL," +
                 CHECKIN_TIME + " NUMERIC NOT NULL," +
-                CHECKIN_COUNT + " NUMERIC" +
+                CHECKIN_COUNT + " NUMERIC," +
                 " PRIMARY KEY (" + CHECKIN_TYPE + "," + CHECKIN_TIME + "));");
     }
 
