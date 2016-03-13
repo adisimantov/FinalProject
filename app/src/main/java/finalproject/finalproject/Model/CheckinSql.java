@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import java.util.LinkedList;
 import java.util.List;
 
+import finalproject.finalproject.Utils;
+
 /**
  * Created by Anna on 05-Mar-16.
  */
@@ -26,7 +28,7 @@ public class CheckinSql {
 
             do {
                 String type = cursor.getString(type_index);
-                Checkin.TimePart time = Checkin.TimePart.fromInt(cursor.getInt(time_index));
+                Utils.TimePart time = Utils.TimePart.fromInt(cursor.getInt(time_index));
                 int count = cursor.getInt(count_index);
 
                 Checkin st = new Checkin(type, time, count);
@@ -63,7 +65,7 @@ public class CheckinSql {
         Checkin checkin = null;
 
         String type;
-        Checkin.TimePart time;
+        Utils.TimePart time;
         int count;
 
         if (cursor.moveToFirst()) {
@@ -72,7 +74,7 @@ public class CheckinSql {
             int count_index = cursor.getColumnIndex(CHECKIN_COUNT);
 
             type = cursor.getString(type_index);
-            time = Checkin.TimePart.fromInt(cursor.getInt(time_index));
+            time = Utils.TimePart.fromInt(cursor.getInt(time_index));
             count = cursor.getInt(count_index);
 
             checkin = new Checkin(type, time, count);

@@ -31,6 +31,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import finalproject.finalproject.Model.Model;
+
 public class MainActivity extends Activity {
     private TextView info;
     private LoginButton loginButton;
@@ -75,20 +77,8 @@ public class MainActivity extends Activity {
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                //"me/tagged_places?fields=created_time,place{name,category_list,location}"
-                Bundle parameters = new Bundle();
-                parameters.putString("fields", "created_time.order(reverse_chronological)," +
-                        "place{name,category_list,location}");
-                new GraphRequest(
-                        AccessToken.getCurrentAccessToken(),
-                        "me/tagged_places",
-                        parameters,
-                        HttpMethod.GET,
-                        new GraphRequest.Callback() {
-                            public void onCompleted(GraphResponse response) {
-                                info.setText(response.toString());
-                            }
-                        }).executeAsync();
+                Model.getInstance().init(getApplicationContext());
+                Model.getInstance().getCheckinsFromFacebook();
             }
 
             @Override
