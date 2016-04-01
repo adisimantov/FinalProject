@@ -32,6 +32,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import finalproject.finalproject.Model.Model;
+import finalproject.finalproject.Receivers.AlarmReceiver;
 
 public class MainActivity extends Activity {
     private TextView info;
@@ -77,8 +78,7 @@ public class MainActivity extends Activity {
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                Model.getInstance().init(getApplicationContext());
-                Model.getInstance().getCheckinsFromFacebook();
+                AlarmReceiver.getInstance().init(getApplicationContext());
             }
 
             @Override

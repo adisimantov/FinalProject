@@ -1,5 +1,8 @@
 package finalproject.finalproject;
 
+import android.support.annotation.NonNull;
+
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -102,13 +105,42 @@ public class Utils {
          */
         public static TimePart getTimePart(String date) throws ParseException {
 
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss+SSSS");
-            Calendar cal = Calendar.getInstance();
-
-            cal.setTime(dateFormat.parse(date));
+            Calendar cal = parseCreatedTimeToCal(date);
 
             return getTimePart(cal);
         }
 
+    }
+    public final static String FACEBOOK_CREATED_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss+SSSS";
+    public final static String APP_DEFAULT_TIMESTAMP_FORMAT =  "dd/MM/yyyy HH:mm:ss";
+
+
+    public static String getCurrentTimestamp() {
+        Calendar cal = Calendar.getInstance();
+        DateFormat formatter = new SimpleDateFormat(APP_DEFAULT_TIMESTAMP_FORMAT);
+        return formatter.format((cal.getTime()));
+    }
+
+    public static Calendar parseTimestampToCal(String timestamp) throws ParseException{
+        if (timestamp != null) {
+            return getCalendar(timestamp, APP_DEFAULT_TIMESTAMP_FORMAT);
+        }
+        return null;
+    }
+
+    @NonNull
+    public static Calendar parseCreatedTimeToCal(String date) throws ParseException {
+        if (date != null) {
+            return getCalendar(date, FACEBOOK_CREATED_TIME_FORMAT);
+        }
+        return null;
+    }
+
+    @NonNull
+    private static Calendar getCalendar(String date, String dateFormatString) throws ParseException {
+        SimpleDateFormat dateFormat = new SimpleDateFormat(dateFormatString);
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(dateFormat.parse(date));
+        return cal;
     }
 }
