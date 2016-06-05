@@ -61,6 +61,10 @@ public class Model {
         public void onResult(Checkin checkin);
     }
 
+    public interface GetCheckinListnListener {
+        public void onResult(List<Checkin> checkin);
+    }
+
     public interface SimpleSuccessListener {
         public void onResult(boolean result);
     }
@@ -78,6 +82,44 @@ public class Model {
     public int deleteLocalCheckin(String type, int time) {
         return local.deleteCheckin(type, time);
     }
+
+    public void getLocalCheckinAsync(final GetCheckinListnListener listener, final List<Integer> time) {
+        class GetCheckinAsyncTask extends AsyncTask<String, String, List<Checkin>> {
+            @Override
+            protected List<Checkin> doInBackground(String... params) {
+                return local.getCheckinByTime(time);
+            }
+
+            @Override
+            protected void onPostExecute(List<Checkin> checkin) {
+                super.onPostExecute(checkin);
+                listener.onResult(checkin);
+            }
+        }
+
+        GetCheckinAsyncTask task = new GetCheckinAsyncTask();
+        task.execute();
+    }
+
+
+    public void getLocalCheckinAsync(final GetCheckinListnListener listener, final String type, final List<Integer> time) {
+        class GetCheckinAsyncTask extends AsyncTask<String, String, List<Checkin>> {
+            @Override
+            protected List<Checkin> doInBackground(String... params) {
+                return local.getCheckinByTypeAndTime(type,time);
+            }
+
+            @Override
+            protected void onPostExecute(List<Checkin> checkin) {
+                super.onPostExecute(checkin);
+                listener.onResult(checkin);
+            }
+        }
+
+        GetCheckinAsyncTask task = new GetCheckinAsyncTask();
+        task.execute();
+    }
+
 
     public void getLocalCheckinAsync(final GetCheckinListener listener, final String type, final int time) {
         class GetCheckinAsyncTask extends AsyncTask<String, String, Checkin> {
@@ -181,7 +223,7 @@ public class Model {
                                 boolean newCheckins = true;
 
                                 for (int i = 0; i < checkInsJson.length() && newCheckins; i++) {
-                                    JSONObject obj = checkInsJson.getJSONObject(i);
+                                        JSONObject obj = checkInsJson.getJSONObject(i);
                                     Log.d(TAG, "getCheckinsFromFacebook" + obj.get("created_time"));
                                     newCheckins = proccessCheckIn(obj, lastSyncCal);
                                 }

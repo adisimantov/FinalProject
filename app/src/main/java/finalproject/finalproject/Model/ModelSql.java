@@ -28,6 +28,15 @@ public class ModelSql {
         return CheckinSql.getCheckinByTypeAndTime(dbHelper, type, time);
     }
 
+    public List<Checkin> getCheckinByTypeAndTime(String type, List<Integer> time){
+        return CheckinSql.getCheckinByTypeAndTime(dbHelper, type, time);
+    }
+
+    public List<Checkin> getCheckinByTime(List<Integer> time){
+        return CheckinSql.getCheckinsByTime(dbHelper, time);
+    }
+
+
     public long addOrUpdateCheckin(Checkin checkin){
         return CheckinSql.addOrUpdate(dbHelper, checkin);
     }
